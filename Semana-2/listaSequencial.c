@@ -48,6 +48,26 @@ int lista_vazia(Lista *li)
     return 0;
 }
 
+
+
+int insere_lista_inicio(Lista *li, struct ED_LE dados)
+{
+    if (li == NULL)
+    {
+        return 0;
+    }
+    int i;
+    for (i = li->qtd - 1; i >= 0; i--)
+    {
+        li->dados[i + 1] = li->dados[i];
+        li->dados[0];
+    }
+
+    li->dados[0] = dados;
+    (li->qtd)++;
+}
+
+
 int lista_cheia(Lista *li)
 {
     if (li->qtd == MAX_VETOR)
@@ -58,44 +78,57 @@ int lista_cheia(Lista *li)
 int insere_lista_final(Lista *li, struct ED_LE dados)
 {
     if (li == NULL)
-    {
         return 0;
-    }
     if (lista_cheia(li))
-    {
         return 0;
-    }
-    if (li->qtd < MAX_VETOR)
-    {
-        li->dados[li->qtd] = dados;
-        (li->qtd)++;
-        return 1;
-    }
-    return 0;
+
+    li->dados[li->qtd] = dados;
+    (li->qtd)++;
+    return 1;
 }
 
-int insere_lista_inicio(Lista *li, struct ED_LE dados)
+int consulta_lista_pos(Lista *li, int pos)
+{
+    if (li == NULL || pos < 0 || pos > li->qtd)
+        return 0;
+    return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+void imprime_lista(Lista *li)
 {
     if (li == NULL)
-    {
-        return 0;
-    }
-    if (lista_cheia(li))
-    {
-        return 0;
-    }
+        return;
     int i;
-    for (i = li->qtd - 1; i >= 0; i--)
+    for (i = 0; i < li->qtd; i++)
     {
-        li->dados[i + 1] = li->dados[i];
-        li->dados[0];
-
-        printf("li->qtd = %d \n", li->qtd);
+        printf("Dado n%d: %d\n", i + 1, li->dados[i]);
+        printf("---------------------------------------------\n");
     }
-
-    li->dados[0] = dados;
-    (li->qtd)++;
 }
+
+
+
+int remove_lista_final(Lista *li)
+{
+    if (li == NULL)
+        return 0;
+    if (li->qtd == 0)
+        return 0;
+    li->qtd--;
+    return 1;
+}
+
+
 
 int insere_lista_ordenada(Lista *li, struct ED_LE ed_le)
 {
@@ -116,27 +149,7 @@ int insere_lista_ordenada(Lista *li, struct ED_LE ed_le)
     return 1;
 }
 
-void imprime_lista(Lista *li)
-{
-    if (li == NULL)
-        return;
-    int i;
-    for (i = 0; i < li->qtd; i++)
-    {
-        printf("Dado n%d: %d\n", i + 1, li->dados[i]);
-        printf("---------------------------------------------\n");
-    }
-}
 
-int remove_lista_final(Lista *li)
-{
-    if (li == NULL)
-        return 0;
-    if (li->qtd == 0)
-        return 0;
-    li->qtd--;
-    return 1;
-}
 
 int remove_inicio_lista(Lista *li)
 {
@@ -168,13 +181,6 @@ int remove_lista(Lista *li, int num)
     return 1;
 }
 
-int consulta_lista_pos(Lista *li, int pos)
-{
-    if (li == NULL || pos < 0 || pos > li->qtd)
-        return 0;
-    return 1;
-}
-
 int consulta_lista_conteudo(Lista *li, int num)
 {
     if (li == NULL)
@@ -184,7 +190,7 @@ int consulta_lista_conteudo(Lista *li, int num)
         i++;
     if (i == li->qtd)
         return 0;
-    return 1;
+    return i + 1;
 }
 
 int main()
@@ -290,13 +296,15 @@ int main()
             printf("Qual numero deseja consultar? ");
             scanf("%d", &num);
             printf("\n");
-            if (consulta_lista_conteudo(li, num))
+            int x = consulta_lista_conteudo(li, num);
+
+            if (x)
             {
-                printf("Elemento %d: [%d]\n", num, li->dados[num]);
+                printf("Elemento %d: posição [%d]\n", num, x - 1);
                 printf("\n");
             }
             else
-                printf("ELEMENTO INEXISTENTE!\n\n");
+                printf("Elemento não encontrado!\n\n");
             break;
 
         case 10:
