@@ -19,11 +19,13 @@ typedef struct elemento Elem; //4
 //Funcao para criar a lista
 Lista *cria_lista()
 {
-    Lista *li = (Lista *)malloc(sizeof(Lista)); //5 reservando memoria para o primeiro no da lista
+    Lista *li = (Lista *)malloc(sizeof(Lista)); //reservar memoria para o primeiro no da lista
     if (li != NULL)
-        *li = NULL; //6 ultimo elemento aponta para null
-    printf("Lista criada.\n\n");
-    return li;
+    {
+        *li = NULL; //Dando ao ultimo elemento da lista o valor de null
+        printf("Lista criada.\n\n");
+        return li;
+    }
 }
 
 //Funcao para liberar a lista
@@ -33,10 +35,10 @@ void libera_lista(Lista *li)
     {
         Elem *no;
         while ((*li) != NULL)
-        {                      //enquanto a lista nao for vazia
+        {                      
             no = *li;          //no recebe inicio da lista
-            *li = (*li)->prox; //inicio da lista vai apontar para o proximo elemento
-            free(no);          //libera antigo inicio
+            *li = (*li)->prox; //inicio da lista vai apontar para o proximo
+            free(no);          
         }
         free(li); //libera inicio da lista
     }
@@ -44,19 +46,6 @@ void libera_lista(Lista *li)
 }
 
 //Funcao para saber o tamanho da lista
-int tamanho_lista(Lista *li)
-{
-    if (li == NULL)
-        return 0;
-    int i = 0;
-    Elem *no = *li;
-    while (no != NULL)
-    {
-        i++;
-        no = no->prox;
-    }
-    return i;
-}
 
 //Funcao para saber se a lista esta cheia
 int lista_cheia(Lista *li)
@@ -173,21 +162,19 @@ int remove_lista_final(Lista *li)
     return 1;
 }
 
-//Funcao para remover elemnento do inicio da lista
 int remove_inicio_lista(Lista *li)
 {
     if (li == NULL)
         return 0;
-    if ((*li) == NULL) //lista vazia
+    if ((*li) == NULL)
         return 0;
-    Elem *no = *li; //auxiliar
-    *li = no->prox; //inicio da lista aponta para o proximo elemento do no
-    free(no);       //libera no
+    Elem *no = *li;
+    *li = no->prox;
+    free(no);
     printf("ELEMENTO REMOVIDO!\n\n");
     return 1;
 }
 
-//Funcao para remover um elemento qualquer
 int remove_lista(Lista *li, int num)
 {
     if (li == NULL)
@@ -198,9 +185,9 @@ int remove_lista(Lista *li, int num)
         ant = no;
         no = no->prox;
     }
-    if (no == NULL) //elemento nao encontrado
+    if (no == NULL)
         return 0;
-    if (no == *li) //elemento e o primeiro da lista
+    if (no == *li)
         *li = no->prox;
     else
         ant->prox = no->prox;
@@ -209,7 +196,19 @@ int remove_lista(Lista *li, int num)
     return 1;
 }
 
-//Funcao para consultar por posicao
+int tamanho_lista(Lista *li)
+{
+    if (li == NULL)
+        return 0;
+    int i = 0;
+    Elem *no = *li;
+    while (no != NULL)
+    {
+        i++;
+        no = no->prox;
+    }
+    return i;
+}
 int consulta_lista_pos(Lista *li, int pos, struct ED_LE *ed_le)
 {
     if (li == NULL || pos <= 0)
@@ -221,7 +220,7 @@ int consulta_lista_pos(Lista *li, int pos, struct ED_LE *ed_le)
         no = no->prox;
         i++;
     }
-    if (no == NULL) //lista vazia ou posicao nao encontrada
+    if (no == NULL)
         return 0;
     else
     {
@@ -230,8 +229,7 @@ int consulta_lista_pos(Lista *li, int pos, struct ED_LE *ed_le)
     }
 }
 
-//Funcao para consultar por conteudo
-int consulta_lista_conteudo(Lista *li, int num, struct ED_LE *ed_le)
+int consulta_lista_conteudo(Lista *li, int num)
 {
     int pos = 1;
     if (li == NULL)
@@ -246,12 +244,12 @@ int consulta_lista_conteudo(Lista *li, int num, struct ED_LE *ed_le)
         return 0;
     else
     {
-        *ed_le = no->dados;
+       
         return pos;
     }
 }
 
-//Funcao para imprimir lista
+
 void imprime_lista(Lista *li)
 {
     if (li == NULL)
@@ -279,7 +277,7 @@ int main()
         printf("Selecione uma opcao:\n\n");
         printf("1) Criar a lista dinamica por contiguidade\n2) Liberar lista dinamica por contiguidade\n3) Inserir no inicio\n4) Inserir no fim\n5) Inserir no meio (ordenado)\n6) Remover do inicio\n7) Remover do fim\n8) Remover do meio\n9) Consultar pelo conteudo\n10) Consultar pela posicao\n11) Imprimir Lista Dinamica por Contiguidade\n12) Sair\n");
         printf("\nOpcao: ");
-        scanf("%d", &entrada);
+        scanf(" %d", &entrada);
         printf("\n");
         system("cls");
         switch (entrada)
@@ -331,6 +329,9 @@ int main()
             insere_lista_ordenada(li, ed_le);
             break;
         case 6:
+            remove_inicio_lista(li);
+            printf("Elemento Removido\n\n");
+
             break;
         case 7:
             remove_lista_final(li);
@@ -355,7 +356,7 @@ int main()
                 printf("\n");
             }
             else
-                printf("ELEMENTO INEXISTENTE!\n\n");
+                printf("Elemento Não Encontrado!\n\n\n\n");
             break;
         case 10:
             printf("Qual posicao deseja consultar? ");
@@ -368,7 +369,7 @@ int main()
                 printf("\n");
             }
             else
-                printf("ELEMENTO INEXISTENTE!\n\n");
+                printf("Elemento Não Encontrado!\n\n\n\n");
             break;
         case 11:
             imprime_lista(li);
